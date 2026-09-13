@@ -377,7 +377,7 @@ export default function Cemetery({ windowId }: { windowId: string }) {
                     }}
                   >
                     {generatingRoast ? <Loader2 size={12} className="animate-spin inline mr-1" /> : '🤖 '}
-                    {generatingRoast ? 'Communing with the dead...' : 'Ask AI for the Real Cause'}
+                    {generatingRoast ? 'Communing with the dead...' : 'Real Cause'}
                   </button>
                 )}
               </div>
