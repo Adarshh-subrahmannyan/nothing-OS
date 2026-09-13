@@ -13,6 +13,7 @@ type Project = {
   commits: number
   cause: string
   language: string
+  aiRoast?: string
 }
 
 const DEMO_PROJECTS: Project[] = [
@@ -55,6 +56,7 @@ export default function Cemetery({ windowId }: { windowId: string }) {
   const [githubInput, setGithubInput] = useState('')
   const [newProject, setNewProject] = useState({ name: '', cause: '', commits: '' })
   const [projects, setProjects] = useState<Project[]>(DEMO_PROJECTS)
+  const [generatingRoast, setGeneratingRoast] = useState(false)
 
   const fetchGithub = async () => {
     if (!githubInput.trim()) return
@@ -122,6 +124,34 @@ export default function Cemetery({ windowId }: { windowId: string }) {
     setProjects(prev => [p, ...prev])
     setNewProject({ name: '', cause: '', commits: '' })
     setAdding(false)
+  }
+
+  const handleGenerateRoast = async (project: Project) => {
+    if (project.aiRoast || generatingRoast) return
+    setGeneratingRoast(true)
+    try {
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'roast_repo',
+          repoName: project.name,
+          description: project.description,
+          language: project.language
+        }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setProjects(prev => prev.map(p => p.id === project.id ? { ...p, aiRoast: data.result } : p))
+        if (selected?.id === project.id) {
+          setSelected(prev => prev ? { ...prev, aiRoast: data.result } : prev)
+        }
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setGeneratingRoast(false)
+    }
   }
 
   return (
@@ -320,6 +350,36 @@ export default function Cemetery({ windowId }: { windowId: string }) {
                 >
                   "{selected.cause}"
                 </div>
+                {selected.aiRoast ? (
+                  <div 
+                    className="mt-4 p-3 rounded-lg"
+                    style={{
+                      background: 'rgba(0,0,0,0.1)',
+                      border: '1px dashed rgba(255,255,255,0.2)',
+                      color: '#000',
+                      fontSize: 13,
+                      fontStyle: 'italic',
+                      textShadow: '1px 1px 0px rgba(255,255,255,0.1)',
+                    }}
+                  >
+                    <span className="font-bold block mb-1" style={{ fontSize: 10, color: '#2A2C30' }}>AI'S REAL CAUSE OF DEATH:</span>
+                    {selected.aiRoast}
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => handleGenerateRoast(selected)}
+                    disabled={generatingRoast}
+                    className="mt-4 px-3 py-1.5 rounded-full text-xs font-medium transition-colors hover:bg-black/10 disabled:opacity-50 mx-auto"
+                    style={{
+                      border: '1px solid rgba(0,0,0,0.2)',
+                      color: '#2A2C30',
+                      textShadow: '1px 1px 0px rgba(255,255,255,0.1)',
+                    }}
+                  >
+                    {generatingRoast ? <Loader2 size={12} className="animate-spin inline mr-1" /> : '🤖 '}
+                    {generatingRoast ? 'Communing with the dead...' : 'Ask AI for the Real Cause'}
+                  </button>
+                )}
               </div>
 
               {/* Footer text */}

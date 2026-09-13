@@ -45,7 +45,8 @@ For Software:
 ```
 # Run
  npm run dev
-
+ # note
+ - If the game is not opening use Ignore X Frame Extension
 ### Project Documentation
 For Software:
 <img width="1908" height="946" alt="image" src="https://github.com/user-attachments/assets/8df93e2d-ed21-47d3-906a-9150aeccbe79" />
