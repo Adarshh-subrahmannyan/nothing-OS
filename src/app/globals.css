@@ -1,0 +1,219 @@
+/* ─── Google Fonts ─────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@import "tailwindcss";
+
+/* ─── Sloth OS Design Tokens ─────────────────────────────────────────────────── */
+
+@theme inline {
+  /* Colors */
+  --color-os-bg: #05050A; /* Deeper, richer background */
+  --color-os-desktop: #0A0A10;
+  --color-os-surface: rgba(20, 20, 30, 0.6); /* Translucent surface */
+  --color-os-elevated: rgba(30, 30, 45, 0.65); /* Translucent elevated */
+  --color-os-border: rgba(255, 255, 255, 0.08); /* Subtle glass border */
+  --color-os-text: #F2F4F7;
+  --color-os-text-secondary: #A8AFB9;
+  --color-os-text-muted: #6F7782;
+
+  /* Semantic */
+  --color-os-success: #3FB950;
+  --color-os-warning: #D29922;
+  --color-os-danger: #F85149;
+  --color-os-info: #58A6FF;
+  --color-os-useless: #A371F7;
+  --color-os-useless-dim: rgba(163, 113, 247, 0.15);
+
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-window: 16px; /* slightly more rounded for premium feel */
+  --radius-dialog: 24px;
+
+  /* Z-index layers */
+  --z-desktop: 0;
+  --z-icons: 10;
+  --z-topbar: 100;
+  --z-dock: 200;
+  --z-windows: 1000;
+  --z-menus: 5000;
+  --z-notifications: 6000;
+  --z-dialogs: 7000;
+  --z-firewall: 8000;
+  --z-critical: 9000;
+
+  /* Motion */
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --duration-slow: 350ms;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── Global Reset ───────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  background: var(--color-os-bg);
+  color: var(--color-os-text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Allow text selection in content areas */
+textarea, input, [contenteditable], .selectable {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ─── Glassmorphism Utilities ────────────────────────────────────────────────── */
+
+.glass-panel {
+  background: var(--color-os-surface);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--color-os-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.glass-panel-elevated {
+  background: var(--color-os-elevated);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 16px 48px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── Mesh Gradient Animations ───────────────────────────────────────────────── */
+
+@keyframes mesh-blob-1 {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes mesh-blob-2 {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(-30px, 50px) scale(0.9); }
+  66% { transform: translate(20px, -20px) scale(1.1); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes mesh-blob-3 {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(50px, 30px) scale(1.1); }
+  66% { transform: translate(-30px, -40px) scale(0.95); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+/* ─── Cursor Blink ───────────────────────────────────────────────────────────── */
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: cursor-blink 1.1s step-end infinite;
+}
+
+/* ─── Window Drag ────────────────────────────────────────────────────────────── */
+
+.window-dragging {
+  cursor: grabbing !important;
+}
+
+/* ─── Scan lines (terminal effect) ──────────────────────────────────────────── */
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* ─── Boot text animation ────────────────────────────────────────────────────── */
+
+@keyframes text-appear {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.boot-line {
+  animation: text-appear 0.15s ease-out forwards;
+}
+
+/* ─── Purple glow for uselessness ───────────────────────────────────────────── */
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(163, 113, 247, 0.4); }
+  50% { box-shadow: 0 0 20px rgba(163, 113, 247, 0.8); }
+}
+
+/* ─── Firewall shake ─────────────────────────────────────────────────────────── */
+
+@keyframes firewall-shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-6px); }
+  30% { transform: translateX(6px); }
+  45% { transform: translateX(-4px); }
+  60% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
+}
+
+.firewall-shake {
+  animation: firewall-shake 0.5s ease-in-out;
+}
+
+/* ─── Achievement pop ────────────────────────────────────────────────────────── */
+
+@keyframes achievement-pop {
+  0% { transform: scale(0.7) translateY(20px); opacity: 0; }
+  70% { transform: scale(1.05) translateY(-4px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
